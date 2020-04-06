@@ -2,14 +2,14 @@
 <html>
     <head>
         <meta charset="UTF-8"/>
-        <title>Server With Tokens Lab</title>
+        <title>Server With Database Lab</title>
 
         <link rel='stylesheet' href='/static/style.css' />
     </head>
     <body>
 
         <header>
-            Server With Tokens Lab
+            Server With Database Lab
             <div>
                 Hello, {{username}}
             </div>
@@ -23,7 +23,7 @@
                 
                 <div>
                     <a href='/logout'>Logout</a>
-                    <input type='submit' value='Submit'/>
+                    <input type='submit' value='Change Password'/>
                 </div>
             </form>
             {% with messages = get_flashed_messages() %}

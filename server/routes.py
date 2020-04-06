@@ -9,10 +9,9 @@ from flask import render_template, request, redirect, url_for, make_response, fl
 
 from uuid import uuid4
 from hashlib import sha1
+import re
 
-
-# TODO: Add Database import here
-# TODO: Database code should be a DIFFERENT file
+from server import database
 
 userPasswords = dict()
 
@@ -97,11 +96,21 @@ def registerPOST():
     # If the user is logged in, then we just change the password
     if sessionID in sessionTokens:
         username = sessionTokens[sessionID]
-    elif username in userPasswords:
-        flash( 'Username is already in use.')
-        return redirect(url_for(redirectName))
+    else: 
+        if username in userPasswords:
+            flash( 'Username is already in use.')
+            return redirect(url_for(redirectName))
+        else:
+            # Use regular expressions code from geeksforgeeks to validate username is an email address
+            regex = "^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+            if not (re.search(regex, username)): 
+                # Not an email, invalid. 
+                flash('Username must be a valid email address')
+                return redirect(url_for(redirectName))
+                
 
 	# On success, then we may want to redirect to index
+        # Note: This line either changes the password or creates the user depending on whether logged in (has session token)
     userPasswords[username] = sha1(password.encode()).hexdigest()
     if redirectName != 'view':
         redirectName = 'index'
@@ -152,3 +161,38 @@ def login():
 	# Invalid... redirect to index
     flash('Invalid username or password')
     return redirect(url_for('index'))
+
+
+
+
+
+
+
+
+
+# Database testing zone!
+    # print("Adding Users: Sean, Arun, thisFile")
+    # print("createUser(Sean, isAwesome)", database.createUser("Sean", "isAwesome"))
+    # print("createUser(Arun, isDumb)", database.createUser("Arun", "isDumb"))
+    # print("createUser(thisFile, speaksOnlyTruth)", database.createUser("thisFile", "speaksOnlyTruth"))
+
+    # print("isUsernameTaken(thisFile)", database.isUsernameTaken("thisFile"))
+    # print("Deleting user 'thisFile': ", database.deleteUser("thisFile"))
+    # print("isUsernameTaken(thisFile)", database.isUsernameTaken("thisFile"))
+    # print("isUsernameTaken(Sean)", database.isUsernameTaken("Sean"))
+    # print("isUsernameTaken(Bob)", database.isUsernameTaken("Bob"))
+
+    # print("authenticate(Sean, isAwesome)", database.authenticate("Sean", "isAwesome"))
+    # print("authenticate(Sean, 1)", database.authenticate("Sean", "1"))
+    # print("authenticate(Hi, isAwesome)", database.authenticate("Hi", "isAwesome"))
+    # print("authenticate(Arun, isDumb)", database.authenticate("Arun", "isDumb"))
+
+    # print("changePassword(Sean, 1)", database.changePassword("Sean", "1"))
+    # print("authenticate(Sean, isAwesome)", database.authenticate("Sean", "isAwesome"))
+    # print("authenticate(Sean, 1)", database.authenticate("Sean", "1"))
+
+    # print("viewProfileOf(Sean)", database.viewProfileOf("Sean"))
+    # print("viewProfileOf(Arun)", database.viewProfileOf("Arun"))
+    # print("viewProfileOf(thisFile)", database.viewProfileOf("thisFile"))
+
+    # print("viewAllAccounts: ", database.viewAllAccounts())
