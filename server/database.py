@@ -95,6 +95,11 @@ def changePassword(username, newPassword):
     query = db.update(accounts).values(password = newPassword).where(accounts.columns.username == username)
     connection.execute(query)
 
+def changeFirstLast(id, newFirstName, newLastName):
+    connection = engine.connect()
+    query = db.update(profiles).values(firstName = newFirstName, lastName = newLastName).where(profiles.columns.userID == id)
+    connection.execute(query)
+
 # Get information of another user
 def viewProfileOf(username):
     connection = engine.connect()
@@ -110,6 +115,7 @@ def viewProfileOf(username):
             arr = [username]
             arr.append(resultRow2[1])
             arr.append(resultRow2[2])
+            arr.append(resultRow2[3])
             return arr
     return []
 

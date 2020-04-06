@@ -30,6 +30,7 @@ def index():
     if sessionID in sessionTokens:
         return redirect(url_for('view'))
 
+
 	# Make a CSRF token and send back our index
     token = uuid4()
     csrfTokens[str(token)]=True
