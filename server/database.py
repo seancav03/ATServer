@@ -94,6 +94,7 @@ def changePassword(username, newPassword):
     connection = engine.connect()
     query = db.update(accounts).values(password = newPassword).where(accounts.columns.username == username)
     connection.execute(query)
+    return True
 
 def changeFirstLast(id, newFirstName, newLastName):
     connection = engine.connect()
@@ -116,6 +117,27 @@ def viewProfileOf(username):
             arr.append(resultRow2[1])
             arr.append(resultRow2[2])
             arr.append(resultRow2[3])
+            arr.append(resultRow2[4])
+            return arr
+    return []
+
+    # Get information of another user by userID
+def viewProfileByID(userID):
+    connection = engine.connect()
+    query = db.select([accounts]).where(accounts.columns.id == userID)
+    ResultProxy = connection.execute(query)
+    resultRow = ResultProxy.fetchone()
+    if(resultRow):
+        username = resultRow[1]
+        query2 = db.select([profiles]).where(profiles.columns.userID == userID)
+        ResultProxy2 = connection.execute(query2)
+        resultRow2 = ResultProxy2.fetchone()
+        if resultRow2:
+            arr = [username]
+            arr.append(resultRow2[1])
+            arr.append(resultRow2[2])
+            arr.append(resultRow2[3])
+            arr.append(resultRow2[4])
             return arr
     return []
 
@@ -125,4 +147,17 @@ def viewAllAccounts():
     query = db.select([profiles])
     ResultProxy = connection.execute(query)
     ResultSet = ResultProxy.fetchall()
-    return ResultSet
+    query2 = db.select([accounts])
+    ResultProxy2 = connection.execute(query2)
+    ResultSet2 = ResultProxy2.fetchall()
+    members = []
+    for member in ResultSet2:
+        members.append([member[0], member[1]])
+    for member in members:
+        for check in ResultSet:
+            if member[0] == check[3]:
+                member.append(check[1])
+                member.append(check[2])
+                member.append(check[4])
+                break
+    return members

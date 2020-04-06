@@ -15,8 +15,8 @@
             <div class='form-title'> Login </div>
             <form method='POST' action='/view'>
                 <input type='hidden' name='token_csrf' value='{{csrf}}' />
-                <input type='text' name='username' placeholder='Email'/>
-                <input type='password' name='password' placeholder='Password'/>
+                <input type='text' name='username' placeholder='Email' required/>
+                <input type='password' name='password' placeholder='Password' required/>
                 
                 <div>
                     <a href='/register'>Register</a>

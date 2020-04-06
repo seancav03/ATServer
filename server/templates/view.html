@@ -11,30 +11,60 @@
         <header>
             Server With Database Lab
             <div>
-                Hello, {{username}}
+                {{info[0]}}
+            </div>
+            <div>
+                Hello, {{info[1]}} {{info[2]}}
+            </div>
+            <div>
+                Account Created: {{info[4]}}
             </div>
         </header>
-        <div class='content'>
-            <div class='form-title'> Change Password </div>
-            <form method='POST' action='/register'>
-                <input type='hidden' name='token_csrf' value='{{csrf}}'/>
-                <input type='password' name='password' placeholder='Password'/>
-                <input type='password' name='vpassword' placeholder='Retype Password'/>
-                
-                <div>
-                    <a href='/logout'>Logout</a>
-                    <input type='submit' value='Change Password'/>
-                </div>
-            </form>
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <ul class='flashes'>
-                        {% for message in messages %}
-                            <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endwith %}
-        </div>
+        {% if theirInfo %}
+            <div class='content'>
+                <div class='form-title'> You are Viewing User: {{theirInfo[0]}} </div>
+                <div> First Name: {{theirInfo[1]}} </div>
+                <div> Last Name: {{theirInfo[2]}} </div>
+                <div> Account Created: {{theirInfo[4]}} </div>
+            </div>
+        {% else %}
+            <div class='content'>
+                <div class='form-title'> Change Password </div>
+                <form method='POST' action='/register'>
+                    <input type='hidden' name='token_csrf' value='{{csrf}}'/>
+                    <input type='password' name='password' placeholder='Password' required/>
+                    <input type='password' name='vpassword' placeholder='Retype Password' required/>
+                    
+                    <div>
+                        <a href='/logout?csrf={{csrf}}'>Logout</a>
+                        <input type='submit' value='Change Password'/>
+                    </div>
+                </form>
+
+                <div class='form-title'> Change Name </div>
+                <form method='POST' action='/changeName'>
+                    <input type='hidden' name='token_csrf2' value='{{csrf}}'/>
+                    <input type='hidden' name='userID' value='{{info[3]}}'/>
+                    <input type='text' name='fName' placeholder='new first name' required/>
+                    <input type='text' name='lName' placeholder='new last name' required/>
+                    
+                    <div>
+                        <a href='/deleteAccount?csrf={{csrf}}'>Delete my Account</a>
+                        <input type='submit' value='Change Name'/>
+                    </div>
+                </form>
+
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class='flashes'>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+                <a href='/members' style="border: 2px solid black; margin: 5px; padding: 0.25em">See all Members</a>
+            </div>
+        {% endif %}
     </body>
 </html>

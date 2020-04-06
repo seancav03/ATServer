@@ -15,9 +15,9 @@
             <div class='form-title'> Register </div>
             <form method='POST' action='/register'>
                 <input type='hidden' name='token_csrf' value='{{csrf}}'/>
-                <input type='text' name='username' placeholder='Email'/>
-                <input type='password' name='password' placeholder='Password'/>
-                <input type='password' name='vpassword' placeholder='Retype Password'/>
+                <input type='text' name='username' placeholder='Email' required/>
+                <input type='password' name='password' placeholder='Password' required/>
+                <input type='password' name='vpassword' placeholder='Retype Password' required/>
                 
                 <div>
                     <a href='/'>Login</a>
